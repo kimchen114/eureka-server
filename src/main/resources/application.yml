@@ -1,0 +1,54 @@
+security:
+  user:
+    name: aaa
+    password: bbb
+  basic:
+    enabled: false
+    
+server:
+  port: 8761
+  
+eureka:
+  instance:
+    hostname: localhost
+    lease-renewal-interval-in-seconds: 0  
+  client:
+    register-with-eureka: false       #由于该应用为注册中心，所以设置为 false, 代表不向注册中心注册自己。
+    fetch-registry: false             #由于注册中心的职责就是维护服务实例，它并不需要去检索服务， 所以也设置为 false 
+    service-url: 
+      defaultZone : http://${eureka.instance.hostname}:${server.port}/eureka
+  server:
+    enable-self-preservation: false   #关闭eureka自我保护机制
+    wait-time-in-ms-when-sync-empty: 0
+---
+spring:
+  profiles: peer1    
+server:
+  port: 1111    
+eureka:
+  instance:
+    hostname: peer1  
+  client:  
+    service-url: 
+      defaultZone : http://peer2:2222/eureka    
+      
+---
+spring:
+  profiles: peer2    
+server:
+  port: 2222    
+eureka:
+  instance:
+    hostname: peer2  
+  client:  
+    service-url: 
+      defaultZone : http://peer1:1111/eureka    
+    
+    
+    
+    
+    
+    
+    
+    
+    
